@@ -1,4 +1,4 @@
-package CatalogoCanciones
+package primeiros.exercicios.CatalogoCanciones
 
 class Song (var titulo:String,
             var artista: String,

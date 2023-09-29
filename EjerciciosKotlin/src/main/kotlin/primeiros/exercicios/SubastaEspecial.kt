@@ -1,4 +1,4 @@
-
+package primeiros.exercicios
 fun main() {
     val winningBid = Bid(5000, "Private Collector")
 

@@ -1,4 +1,4 @@
-package TelefonosPlegables
+package primeiros.exercicios.TelefonosPlegables
 
 open class Phone(var isScreenLightOn: Boolean = false){
     open fun switchOn() {

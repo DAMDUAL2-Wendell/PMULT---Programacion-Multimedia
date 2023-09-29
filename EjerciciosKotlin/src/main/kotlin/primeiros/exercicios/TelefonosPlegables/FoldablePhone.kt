@@ -1,4 +1,4 @@
-package TelefonosPlegables
+package primeiros.exercicios.TelefonosPlegables
 
 class FoldablePhone():Phone(){
     var folded: Boolean = true

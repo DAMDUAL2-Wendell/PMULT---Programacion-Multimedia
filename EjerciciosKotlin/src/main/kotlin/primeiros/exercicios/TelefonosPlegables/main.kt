@@ -1,4 +1,4 @@
-package TelefonosPlegables
+package primeiros.exercicios.TelefonosPlegables
 
 fun main() {
     var telefonoNormal = Phone()

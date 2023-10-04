@@ -12,8 +12,14 @@ interface VehiculoDeMotor{
 }
 abstract class VehiculoTerrestre(var marca: String?, var caracteristicas: Map<String,String>?):FuncionalidadesVehiculo{
 
-    abstract var tipo: String?
-    abstract protected var tipoConArtigo: String?
+    private var tipo: String = javaClass.name
+
+    private var tipoConArtigo: String? = when(tipo){
+        "coche" -> "o "
+        "bicicleta" -> "a "
+        "moto" -> "a "
+        else -> ""
+    }.replaceFirstChar { it.uppercase() }
 
     fun verCaracteristicas() {
         if(caracteristicas!=null){
@@ -34,12 +40,6 @@ abstract class VehiculoTerrestre(var marca: String?, var caracteristicas: Map<St
 class Coche(marca: String?, var numeroPortas: Int?,
             caracteristicas: Map<String,String>?)
     : VehiculoTerrestre(marca, caracteristicas),FuncionalidadesVehiculo,VehiculoDeMotor {
-    override var tipo: String?
-        get() = "coche"
-        set(value) {}
-    override var tipoConArtigo: String?
-        get() = "O $tipo"
-        set(value) {}
 
     override var estaEncendido: Boolean = false
 
@@ -53,12 +53,6 @@ class Moto(marca: String?, caracteristicas: Map<String, String>?
 ): VehiculoTerrestre(marca, caracteristicas),FuncionalidadesVehiculo,VehiculoDeMotor {
 
     override var estaEncendido: Boolean = false
-    override var tipo: String?
-        get() = "moto"
-        set(value) {}
-    override var tipoConArtigo: String?
-        get() = "A $tipo"
-        set(value) {}
 
      override fun encender(){
         if(estaEncendido){
@@ -77,13 +71,6 @@ class Moto(marca: String?, caracteristicas: Map<String, String>?
 class Bicicleta(marca: String?,var numeroMarchas: Int?,
                 caracteristicas: Map<String, String>?)
     : VehiculoTerrestre(marca, caracteristicas) {
-
-    override var tipo: String?
-        get() = "bicicleta"
-        set(value) {}
-    override var tipoConArtigo: String?
-        get() = "A $tipo"
-        set(value) {}
 
 }
 

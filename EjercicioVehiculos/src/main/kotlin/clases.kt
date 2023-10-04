@@ -10,47 +10,36 @@ interface VehiculoDeMotor{
     }
     fun apagar()
 }
-abstract class VehiculoTerrestre:FuncionalidadesVehiculo{
-    abstract var marca: String?
-    abstract val caracteristicas: Map<String,String>?
-    private var tipo: String? = ""
-    protected var tipoConArtigo: String = "o " + tipo
+abstract class VehiculoTerrestre(var marca: String?, var caracteristicas: Map<String,String>?):FuncionalidadesVehiculo{
+
+    abstract var tipo: String?
+    abstract protected var tipoConArtigo: String?
 
     fun verCaracteristicas() {
-        if(VehiculoTerrestre is String){
-
-        }
         if(caracteristicas!=null){
-            caracteristicas.forEach { entry -> println("\t${entry.key}: ${entry.value}") }
+            println("As caracteristicas adicionais son:")
+            caracteristicas?.forEach { entry -> println("\t-${entry.key}: ${entry.value}") }
         }else{
-            println("A moto non ten ninguna caracteristica adicional definida")
+            println("$tipoConArtigo non ten ninguna caracteristica adicional definida")
         }
     }
-
+    override fun acelerar() {
+        println("Accelerando $tipoConArtigo${if(marca.isNullOrEmpty()) " de marca desconhecida" else "de marca $marca"}")
+    }
+    override fun frear() {
+        println("Freando $tipoConArtigo${if(marca.isNullOrEmpty()) "" else " de marca $marca"}")
+    }
 }
 
-class Coche(override var marca: String?, var numeroPortas: Int?,
-            override val caracteristicas: Map<String,String>?)
-    : VehiculoTerrestre(),FuncionalidadesVehiculo,VehiculoDeMotor {
-
-    fun verCaracteristicas() {
-        if(marca!=null){
-            println("As caracteristicas adicionais son:")
-        }
-        if(caracteristicas!=null){
-            caracteristicas.forEach { entry -> println("\t${entry.key}: ${entry.value}") }
-        }else{
-            println("O coche non ten ninguna caracteristica adicional definida")
-        }
-    }
-
-    override fun acelerar() {
-        println("Accelerando o coche de marca $marca")
-    }
-
-    override fun frear() {
-        println("Freando o coche")
-    }
+class Coche(marca: String?, var numeroPortas: Int?,
+            caracteristicas: Map<String,String>?)
+    : VehiculoTerrestre(marca, caracteristicas),FuncionalidadesVehiculo,VehiculoDeMotor {
+    override var tipo: String?
+        get() = "coche"
+        set(value) {}
+    override var tipoConArtigo: String?
+        get() = "O $tipo"
+        set(value) {}
 
     override var estaEncendido: Boolean = false
 
@@ -60,30 +49,18 @@ class Coche(override var marca: String?, var numeroPortas: Int?,
 
 }
 
-class Moto(override var marca: String?,
-           override val caracteristicas: Map<String, String>?
-)
-    : VehiculoTerrestre(),FuncionalidadesVehiculo,VehiculoDeMotor {
+class Moto(marca: String?, caracteristicas: Map<String, String>?
+): VehiculoTerrestre(marca, caracteristicas),FuncionalidadesVehiculo,VehiculoDeMotor {
 
     override var estaEncendido: Boolean = false
+    override var tipo: String?
+        get() = "moto"
+        set(value) {}
+    override var tipoConArtigo: String?
+        get() = "A $tipo"
+        set(value) {}
 
-    override fun acelerar() {
-        println("Accelerando a moto de marca $marca")
-    }
-
-    override fun frear() {
-        println("Freando a moto")
-    }
-
-    fun verCaracteristicas() {
-        if(caracteristicas!=null){
-            caracteristicas.forEach { entry -> println("\t${entry.key}: ${entry.value}") }
-        }else{
-            println("A moto non ten ninguna caracteristica adicional definida")
-        }
-    }
-
-    override fun encender(){
+     override fun encender(){
         if(estaEncendido){
             println("A moto xa esta encendida")
         }else{
@@ -91,33 +68,22 @@ class Moto(override var marca: String?,
         }
 
     }
-
     override fun apagar() {
         estaEncendido = false
     }
 
 }
 
-class Bicicleta(override var marca: String?,var numeroMarchas: Int?,
-                override val caracteristicas: Map<String, String>?)
-    : VehiculoTerrestre() {
+class Bicicleta(marca: String?,var numeroMarchas: Int?,
+                caracteristicas: Map<String, String>?)
+    : VehiculoTerrestre(marca, caracteristicas) {
 
-    override fun acelerar() {
-        println("Accelerando a bicicleta de marca $marca")
-    }
-
-    override fun frear() {
-        println("Freando a bicicleta")
-    }
-
-    fun verCaracteristicas() {
-        println("As caracteristicas adicionais son:")
-        if(caracteristicas!=null){
-            caracteristicas.forEach { entry -> println("\t${entry.key}: ${entry.value}") }
-        }else{
-            println("A bicicleta non ten ninguna caracteristica adicional definida")
-        }
-    }
+    override var tipo: String?
+        get() = "bicicleta"
+        set(value) {}
+    override var tipoConArtigo: String?
+        get() = "A $tipo"
+        set(value) {}
 
 }
 

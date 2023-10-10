@@ -1,5 +1,4 @@
 fun main() {
-
     //Leccion 5.1.2 ---------------------------------------------------
 
     // Pair
@@ -68,15 +67,20 @@ fun main() {
     println(obxecto1.unhaPropiedade)
     println(obxecto2.unhaPropiedade)
 
+    println(UnhaClase.SingletonDentroCalse.CONSTANTE)
+
+    println("-------------------------")
+
+    println("ola".empezaPorMaiuscula)
+
+
 
 }
 
 fun funcionComplexa() = 4
 
-
 // En tiempo de compilacion
 const val unhaconstante = 5
-
 
 //Singleton
 object ConstantesMatematicas{
@@ -86,3 +90,16 @@ object ConstantesMatematicas{
     const val E = 2.72
 }
 
+class UnhaClase {
+    companion object SingletonDentroCalse{
+        const val CONSTANTE = "constante dunha clase";
+    }
+
+}
+// Funcion de extension String
+fun String.tenEspacios() = any{it == ' '}
+
+// Propiedade de extension String
+
+val String.empezaPorMaiuscula: Boolean
+    get() = this[0].isUpperCase()

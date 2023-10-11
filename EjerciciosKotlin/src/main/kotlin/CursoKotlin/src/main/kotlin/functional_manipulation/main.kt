@@ -10,9 +10,11 @@ fun main() {
         println(metodo.name)
     }
 
-/*    for(metodo in Peixe::class.declaredFunctions){
+    /*
+    for(metodo in Peixe::class.declaredFunctions){
         println(metodo.name)
-    }*/
+    }
+    */
 
     val peixe = Peixe("nemo")
 

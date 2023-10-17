@@ -1,9 +1,9 @@
-import java.lang.reflect.Type
+import kotlin.reflect.full.declaredMemberProperties
 
 fun main() {
-    val perfil = Perfil("s","s",EstadisticasEmpresa(1,1))
+    val perfil = Perfil("s","s",EstadisticasImprimiblesEmpresa(1,1))
     println(perfil.imprimirInformacionPerfil())
-    println(EstadisticasEmpresa(100,40).toString())
+    println(EstadisticasImprimiblesEmpresa(100,40).toString())
     println("-----------------------")
 
     val aplicacion = ConfiguracionApp
@@ -16,13 +16,13 @@ fun main() {
     val perfilPersoal = Perfil(
         "Usuario123",
         "Usuario persoal",
-        EstadisticasPersoales(100, 50)
+        EstadisticasImprimiblesPersoales(100, 50)
     )
 
     val perfilEmpresa = Perfil(
         "Empresa123",
         "Empresa de tecnoloxia",
-        EstadisticasEmpresa(5000, 200)
+        EstadisticasImprimiblesEmpresa(5000, 200)
     )
 
     val outroPerfil = Perfil(
@@ -38,8 +38,8 @@ fun main() {
     outroPerfil.imprimirInformacionPerfil()
 
     println("--------------")
-    println(perfilPersoal.tenEstadisticas<EstadisticasEmpresa>())
-    println(perfilPersoal.tenEstadisticas<EstadisticasPersoales>())
+    println(perfilPersoal.tenEstadisticas<EstadisticasImprimiblesEmpresa>())
+    println(perfilPersoal.tenEstadisticas<EstadisticasImprimiblesPersoales>())
 
 
     println("----------------")
@@ -47,6 +47,11 @@ fun main() {
     perfilEmpresa.configurarPerfil {
         seguidores = 6000
         empleados = 250
+    }
+
+    perfilPersoal.configurarPerfil {
+        seguidores = 6000
+        publicacions = 250
     }
 
 }
@@ -59,7 +64,7 @@ class Perfil<T>(var nome2: String, var descricion2: String, val tipo: T){
         println("A minha App ${singleton.NOME_APLICACION}\n" +
                 "Nome: $nome\n" +
                 "Descricion: $descricion")
-        if(tipo !is Estadisticas){
+        if(tipo !is EstadisticasImprimibles){
             println("\t - ${tipo.toString()}")
         }else{
             tipo.imprimirEstadisticas()
@@ -72,11 +77,15 @@ class Perfil<T>(var nome2: String, var descricion2: String, val tipo: T){
 
 inline fun<reified T> Perfil<*>.tenEstadisticas() = this.estadisticas is T
 
-interface Estadisticas{
-    fun imprimirEstadisticas(){ }
+interface EstadisticasImprimibles{
+    fun imprimirEstadisticas(){
+        for(propiedade in this::class.declaredMemberProperties){
+            println(" - ${propiedade.name}: ${propiedade.getter.call(this)}")
+        }
+    }
 }
 
-data class EstadisticasPersoales(var seguidores: Int, var publicacions: Int):Estadisticas{
+data class EstadisticasImprimiblesPersoales(var seguidores: Int, var publicacions: Int):EstadisticasImprimibles{
     override fun imprimirEstadisticas() {
             println("Estadisticas:" +
                     "\n\t- Seguidores: $seguidores" +
@@ -84,11 +93,11 @@ data class EstadisticasPersoales(var seguidores: Int, var publicacions: Int):Est
     }
 }
 
-data class EstadisticasEmpresa(var seguidores: Int, var publicacions: Int):Estadisticas{
+data class EstadisticasImprimiblesEmpresa(var seguidores: Int, var empleados: Int):EstadisticasImprimibles{
     override fun imprimirEstadisticas() {
         println("Estadisticas:" +
                 "\n\t- Seguidores: $seguidores" +
-                "\n\t- Empleados: $publicacions")
+                "\n\t- Empleados: $empleados")
     }
 }
 
@@ -99,6 +108,8 @@ object ConfiguracionApp{
     private fun realizarLog(mensaxe: String){println("LOG: Tema da interfaz modificado")}
 }
 
-fun Perfil<*>.configurarPerfil():(Int, Int) -> Int =  { first, second ->
-    if(this.estadisticas is Estadisticas){}
+// Funcion de extension xenerica para modificar as estadisticas deun perfil
+fun <T>Perfil<T>.configurarPerfil(configuracion: T.() -> Unit){
+    estadisticas.configuracion()
 }
+

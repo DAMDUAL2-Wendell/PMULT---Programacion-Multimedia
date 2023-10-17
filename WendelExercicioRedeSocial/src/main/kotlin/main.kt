@@ -41,6 +41,14 @@ fun main() {
     println(perfilPersoal.tenEstadisticas<EstadisticasEmpresa>())
     println(perfilPersoal.tenEstadisticas<EstadisticasPersoales>())
 
+
+    println("----------------")
+
+    perfilEmpresa.configurarPerfil {
+        seguidores = 6000
+        empleados = 250
+    }
+
 }
 
 class Perfil<T>(var nome2: String, var descricion2: String, val tipo: T){
@@ -57,6 +65,8 @@ class Perfil<T>(var nome2: String, var descricion2: String, val tipo: T){
             tipo.imprimirEstadisticas()
         }
     }
+
+
     val singleton = ConfiguracionApp
 }
 
@@ -66,7 +76,7 @@ interface Estadisticas{
     fun imprimirEstadisticas(){ }
 }
 
-data class EstadisticasPersoales(val seguidores: Int, val publicacions: Int):Estadisticas{
+data class EstadisticasPersoales(var seguidores: Int, var publicacions: Int):Estadisticas{
     override fun imprimirEstadisticas() {
             println("Estadisticas:" +
                     "\n\t- Seguidores: $seguidores" +
@@ -74,7 +84,7 @@ data class EstadisticasPersoales(val seguidores: Int, val publicacions: Int):Est
     }
 }
 
-data class EstadisticasEmpresa(val seguidores: Int, val publicacions: Int):Estadisticas{
+data class EstadisticasEmpresa(var seguidores: Int, var publicacions: Int):Estadisticas{
     override fun imprimirEstadisticas() {
         println("Estadisticas:" +
                 "\n\t- Seguidores: $seguidores" +
@@ -87,4 +97,8 @@ object ConfiguracionApp{
     var temaInterfaz: String = "Claro"
     private fun cambiarTema(novoTema: String){println("Tema da interfaz cambiado a: $novoTema")}
     private fun realizarLog(mensaxe: String){println("LOG: Tema da interfaz modificado")}
+}
+
+fun Perfil<*>.configurarPerfil():(Int, Int) -> Int =  { first, second ->
+    if(this.estadisticas is Estadisticas){}
 }
